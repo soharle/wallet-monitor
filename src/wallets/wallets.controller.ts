@@ -20,37 +20,38 @@ export class WalletsController {
 
   @Post()
   @ApiCreatedResponse({ type: WalletEntity })
-  create(@Body() createWalletDto: CreateWalletDto) {
-    return this.walletsService.create(createWalletDto);
+  async create(@Body() createWalletDto: CreateWalletDto) {
+    return new WalletEntity(await this.walletsService.create(createWalletDto));
   }
 
   @Get()
   @ApiOkResponse({ type: [WalletEntity] })
-  findAll() {
-    return this.walletsService.findAll();
+  async findAll() {
+    const wallets = await this.walletsService.findAll();
+    return wallets.map((wallet) => new WalletEntity(wallet));
   }
 
   @Get('disabled')
   @ApiOkResponse({ type: [WalletEntity] })
-  findAllDisabled() {
-    return this.walletsService.findAllDisabled();
+  async findAllDisabled() {
+    const wallets = await this.walletsService.findAllDisabled();
+    return wallets.map((wallet) => new WalletEntity(wallet));
   }
 
-  @Get(':id')
+  @Get(':wallet')
   @ApiOkResponse({ type: WalletEntity })
-  findOne(@Param('id') id: string) {
-    return this.walletsService.findOne(+id);
+  async findOne(@Param('wallet') wallet: string) {
+    return new WalletEntity(await this.walletsService.findOne(wallet));
   }
 
-  @Patch(':id')
+  @Patch(':wallet')
   @ApiOkResponse({ type: WalletEntity })
-  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto) {
-    return this.walletsService.update(+id, updateWalletDto);
-  }
-
-  @Delete(':id')
-  @ApiOkResponse({ type: WalletEntity })
-  remove(@Param('id') id: string) {
-    return this.walletsService.remove(+id);
+  async update(
+    @Param('wallet') wallet: string,
+    @Body() updateWalletDto: UpdateWalletDto,
+  ) {
+    return new WalletEntity(
+      await this.walletsService.updateEnabled(wallet, updateWalletDto),
+    );
   }
 }

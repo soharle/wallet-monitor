@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWalletDto } from './dto/create-wallet.dto';
-import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -19,18 +18,22 @@ export class WalletsService {
     return this.prisma.wallet.findMany({ where: { enabled: false } });
   }
 
-  findOne(id: number) {
-    return this.prisma.wallet.findUnique({ where: { id } });
+  findOne(wallet: string) {
+    const entity = this.prisma.wallet.findFirst({ where: { wallet } });
+    if (!wallet) {
+      throw new NotFoundException(`Wallet ${wallet} not found`);
+    }
+    return entity;
   }
 
-  update(id: number, updateWalletDto: UpdateWalletDto) {
-    return this.prisma.wallet.update({
-      where: { id },
-      data: updateWalletDto,
+  async updateEnabled(wallet: string, UpdateWalletDto) {
+    const result = await this.prisma.wallet.updateMany({
+      where: { wallet },
+      data: UpdateWalletDto,
     });
-  }
 
-  remove(id: number) {
-    return this.prisma.wallet.delete({ where: { id } });
+    return result.count === 1
+      ? this.prisma.wallet.findFirst({ where: { wallet } })
+      : null;
   }
 }

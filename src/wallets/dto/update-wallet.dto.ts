@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateWalletDto } from './create-wallet.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean } from 'class-validator';
 
-export class UpdateWalletDto extends PartialType(CreateWalletDto) {}
+export class UpdateWalletDto {
+  @IsBoolean()
+  @ApiProperty()
+  enabled: boolean;
+}
