@@ -21,15 +21,11 @@ export class UsersService {
     return this.prisma.user.create({ data: createUserDto });
   }
 
-  findOneByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email } });
-  }
-
   findOne(id: number) {
     return this.prisma.user.findUnique({ where: { id } });
   }
 
-  async update(email: string, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto) {
     if (updateUserDto.password) {
       updateUserDto.password = await bcrypt.hash(
         updateUserDto.password,
@@ -37,6 +33,6 @@ export class UsersService {
       );
     }
 
-    return this.prisma.user.update({ where: { email }, data: updateUserDto });
+    return this.prisma.user.update({ where: { id }, data: updateUserDto });
   }
 }
