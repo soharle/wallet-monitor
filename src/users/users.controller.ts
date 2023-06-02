@@ -4,7 +4,6 @@ import {
   Post,
   Body,
   Patch,
-  Param,
   UseGuards,
   NotFoundException,
 } from '@nestjs/common';

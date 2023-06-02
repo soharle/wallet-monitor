@@ -25,7 +25,6 @@ import { WalletEntity } from './entities/wallet.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { AuthUser } from 'src/auth/auth.decorator';
-import { use } from 'passport';
 
 @ApiTags('wallets')
 @Controller('wallets')
