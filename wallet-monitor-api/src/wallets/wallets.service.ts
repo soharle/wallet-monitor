@@ -6,8 +6,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class WalletsService {
   constructor(private prisma: PrismaService) {}
 
-  create(userId: number, createWalletDto: CreateWalletDto) {
-    const wallet = this.prisma.wallet.findFirst({
+  async create(userId: number, createWalletDto: CreateWalletDto) {
+    const wallet = await this.prisma.wallet.findFirst({
       where: { wallet: createWalletDto.wallet, userId },
     });
 
@@ -15,19 +15,21 @@ export class WalletsService {
       throw new Error('Wallet already exists for this user');
     }
 
-    return this.prisma.wallet.create({
+    const result = this.prisma.wallet.create({
       data: {
         ...createWalletDto,
         userId,
       },
     });
+
+    return result;
   }
 
-  findAllByUser(userId: number, enabled: boolean) {
+  async findAllByUser(userId: number, enabled: boolean) {
     return this.prisma.wallet.findMany({ where: { userId, enabled } });
   }
 
-  findOneByUser(userId: number, wallet: string) {
+  async findOneByUser(userId: number, wallet: string) {
     const entity = this.prisma.wallet.findFirst({ where: { userId, wallet } });
     if (!wallet) {
       throw new NotFoundException();
@@ -39,6 +41,17 @@ export class WalletsService {
     const result = await this.prisma.wallet.updateMany({
       where: { wallet },
       data: UpdateWalletDto,
+    });
+
+    return result.count === 1
+      ? this.prisma.wallet.findFirst({ where: { wallet } })
+      : null;
+  }
+
+  async updateBalance(wallet: string, balance: number) {
+    const result = await this.prisma.wallet.updateMany({
+      where: { wallet },
+      data: { balance },
     });
 
     return result.count === 1

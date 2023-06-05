@@ -1,10 +1,5 @@
 import { Message } from '../../../broker/message';
 
 export class EthereumMessage extends Message {
-  content!: EthereumMessageContent;
+  address!: string;
 }
-
-type EthereumMessageContent = {
-  address: string;
-  user: number;
-};

@@ -10,11 +10,11 @@ export class EthereumHandler implements IHandler<EthereumMessage> {
     const walletService: WalletApiService = new WalletApiService();
 
     try {
-      console.log('Executing EthereumHandler', message.publishedAt);
-      const payload = { address: message.publishedAt.toString() };
-      const resultEtherscan = await etherScanService.getContent(payload);
+      const resultEtherscan = await etherScanService.getContent(
+        message.address,
+      );
       const resultApi = await walletService.saveWallet({
-        address: payload.address,
+        address: message.address,
         balance: resultEtherscan,
       });
 

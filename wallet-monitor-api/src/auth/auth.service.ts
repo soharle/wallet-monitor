@@ -2,11 +2,17 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthEntity } from './entity/auth.entity';
+import { ConfigService } from '@nestjs/config';
+
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private configService: ConfigService,
+    private prisma: PrismaService,
+    private jwtService: JwtService,
+  ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
     const user = await this.prisma.user.findUnique({ where: { email } });
@@ -19,5 +25,12 @@ export class AuthService {
     } else {
       throw new UnauthorizedException();
     }
+  }
+
+  validateApiKey(apiKey: string): boolean {
+    if (apiKey === this.configService.get('API_KEY')) {
+      return true;
+    }
+    return false;
   }
 }

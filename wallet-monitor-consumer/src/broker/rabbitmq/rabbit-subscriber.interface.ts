@@ -17,10 +17,7 @@ export class RabbitSubscriber<T extends broker.Message>
             const body = <T>JSON.parse(message.content.toString());
             if (body) {
               var result = await onMessage(body);
-              console.log('Message consumed', result);
-              result
-                ? channel.ack(message)
-                : channel.nack(message, false, false);
+              result ? channel.ack(message) : channel.reject(message, false);
             }
           }
         });

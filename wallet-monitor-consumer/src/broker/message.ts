@@ -1,3 +1,1 @@
-export class Message {
-  publishedAt!: Date;
-}
+export class Message {}
