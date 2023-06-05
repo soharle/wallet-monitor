@@ -4,7 +4,7 @@ import { ResultWalletApi } from './walletapi.result';
 import { PayloadWalletApi } from './walletapi.payload';
 
 export class WalletApiService {
-  async saveWallet(message: PayloadWalletApi): Promise<boolean> {
+  async sendBalance(message: PayloadWalletApi): Promise<boolean> {
     try {
       const result = await axios.post<ResultWalletApi>(Env.walletApi, message, {
         headers: {

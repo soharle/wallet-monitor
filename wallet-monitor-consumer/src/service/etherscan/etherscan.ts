@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { EtherscanResult } from './etherscan.result';
+import { Env } from '../../infrastructure/env';
 
 export class EtherscanService {
   async getContent(address: string): Promise<string> {
@@ -11,7 +12,7 @@ export class EtherscanService {
 
     try {
       const response = await axios.get<EtherscanResult>(
-        `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=Y5Y9T8JFFTEGQ9ZFG7U8QIFW95GP8GX2P2`,
+        `https://api.etherscan.io/api?module=account&action=balance&address=${address}&tag=latest&apikey=${Env.apiEtherScanKey}}`,
       );
 
       return response.data.result;

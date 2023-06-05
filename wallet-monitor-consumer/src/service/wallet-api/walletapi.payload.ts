@@ -1,4 +1,4 @@
 export class PayloadWalletApi {
-  address!: string;
+  wallet!: string;
   balance!: string;
 }

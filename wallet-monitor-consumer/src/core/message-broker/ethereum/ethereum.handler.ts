@@ -13,8 +13,8 @@ export class EthereumHandler implements IHandler<EthereumMessage> {
       const resultEtherscan = await etherScanService.getContent(
         message.address,
       );
-      const resultApi = await walletService.saveWallet({
-        address: message.address,
+      const resultApi = await walletService.sendBalance({
+        wallet: message.address,
         balance: resultEtherscan,
       });
 
