@@ -52,9 +52,11 @@ export class WalletsController {
       );
 
       if (wallet) {
-        this.rabbitMQService.send({
-          address: wallet.wallet,
-        });
+        if (wallet.enabled) {
+          this.rabbitMQService.send({
+            address: wallet.wallet,
+          });
+        }
         return wallet;
       } else {
         throw new BadRequestException('Could not create wallet');

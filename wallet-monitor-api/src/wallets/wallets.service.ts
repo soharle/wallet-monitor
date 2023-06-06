@@ -51,7 +51,7 @@ export class WalletsService {
   async updateBalance(wallet: string, balance: number) {
     const result = await this.prisma.wallet.updateMany({
       where: { wallet },
-      data: { balance },
+      data: { balance, lastScan: new Date() },
     });
 
     return result.count === 1
